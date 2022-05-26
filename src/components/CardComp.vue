@@ -2,7 +2,7 @@
   <div class="sc-card">
 
     <flip-flop-card :elevation="8" direction="horizontal" width="300">
-      <template slot="front">
+      <template slot="back">
         <div class="basic-card inner">
           <img v-if="cardData.poster_path"
           class="img-fluid"
@@ -12,7 +12,7 @@
           class="placeholder-poster d-flex justify-content-center align-items-center p-3 text-center" >{{cardData.original_title || cardData.original_name}}</div>
         </div>
       </template>
-      <template slot="back">
+      <template slot="front">
         <div class="basic-card inner p-2">
 
             <div class="top">
@@ -24,11 +24,25 @@
                 :src="require(`../assets/img/${cardData.original_language}.png`)" alt="">
             <p v-else>Lingua: {{cardData.original_language}}</p>
             <div>
+              
+              <!-- stampo le stelline piene -->
               <i 
-                v-for="i in 5"
-                :key="i"
-                :class="i <= Math.round(cardData.vote_average/2) ? 'fa-solid' : 'fa-regular' "
-                class="fa-star"></i> 
+                v-for="i in Math.floor(Math.round(cardData.vote_average)/2)"
+                :key="`a${i}`"
+                class="fa-star fa-solid"></i>
+
+              <!-- stampo la mezza stella -->
+              <i v-if="Math.round(cardData.vote_average) % 2" class="fa-solid fa-star-half-stroke"></i> 
+              
+              <!-- stampo le stelline vuote
+                // la differenza di 5 meno stelle piene - modulo 2 del voto reale arrotondato
+              -->
+              <i 
+                v-for="i in (5 - Math.floor(Math.round(cardData.vote_average)/2) - (Math.round(cardData.vote_average) % 2) )"
+                :key="`b${i}`"
+                class="fa-star fa-regular"></i>
+
+              
             </div>
 
             <p class="overview">
